@@ -48,17 +48,19 @@ SELECT check_values_odd_even() AS result FROM DUAL;
 
 -- 4 
 CREATE OR REPLACE FUNCTION generate_insert_command(
-    record_id IN NUMBER,
-    string IN VARCHAR2
+    record_id IN NUMBER
 ) RETURN VARCHAR2 IS
-    insert_command VARCHAR2(1000); 
+    insert_command VARCHAR2(1000);
+    record_value NUMBER;
 BEGIN
-    insert_command := 'INSERT INTO MyTable(id, value) VALUES (' || record_id || ', ''' || string || ''')';
+    SELECT value INTO record_value FROM MyTable WHERE id = record_id;
+    insert_command := 'INSERT INTO MyTable(id, value) VALUES (' || record_id || ', ' || record_value || ')';
     DBMS_OUTPUT.PUT_LINE(insert_command);
     RETURN insert_command;
 END generate_insert_command;
 -- for executing function
-SELECT generate_insert_command(2, 'HELLO') AS result FROM DUAL;
+SELECT generate_insert_command(1) AS result FROM DUAL;
+
 
 -- 5
 CREATE OR REPLACE PROCEDURE insert_value(
