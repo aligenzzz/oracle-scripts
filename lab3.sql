@@ -139,7 +139,7 @@ BEGIN
 END sort_tables_in_schema;
 /
 
-CREATE OR REPLACE PROCEDURE compare_schemas(dev_schema in VARCHAR2, prod_schema in VARCHAR2, ddl_output in VARCHAR2) 
+CREATE OR REPLACE PROCEDURE compare_schemas(dev_schema in VARCHAR2, prod_schema in VARCHAR2, ddl_output in NUMBER) 
 AS
     diff NUMBER := 0;
     query_string VARCHAR2(4000) := '';
@@ -198,7 +198,7 @@ BEGIN
             SELECT create_object('TABLE', rec.table_name, prod_schema, dev_schema) INTO temp_string;
             query_string := query_string || CHR(10) || temp_string;
         ELSE
-            DBMS_OUTPUT.PUT_LINE('Table ' || rec.table_name || ' is same');
+            DBMS_OUTPUT.PUT_LINE('Table ' || rec.table_name || ' is the same');
         END IF;            
     END LOOP; 
     EXECUTE IMMEDIATE 'DELETE FROM sorted_tables';
@@ -224,7 +224,7 @@ BEGIN
             SELECT delete_object('TABLE', rec.table_name, prod_schema) INTO temp_string;
             query_string := query_string || CHR(10) || temp_string;
         ELSE
-            DBMS_OUTPUT.PUT_LINE('Table ' || rec.table_name || ' is same');
+            DBMS_OUTPUT.PUT_LINE('Table ' || rec.table_name || ' is the same');
         END IF;            
     END LOOP; 
     EXECUTE IMMEDIATE 'DELETE FROM sorted_tables';
